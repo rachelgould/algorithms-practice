@@ -1,37 +1,44 @@
 // Solution 1:
 function findClosestValueInBst(tree, target) {
-  let bstNodes = [];
-  // Check if left and right are BST
-  function checkLeft(current, next) {
-    console.log("-------------Checking left on :", current)
-    console.log("Next is :", current)
-    next === null ? true : 
-                          (current.value > next.value) && checkChildren(current)
-                          console.log("done-----------")
-  }
-  function checkRight(current, next) {
-    console.log("-------------Checking right on :", current)
-    console.log("Next is :", current)
-    next === null ? true : 
-                           (current.value <= next.value) && checkChildren(current)
-                           console.log("done-----------")
-  }
-  function checkChildren(current) {
-    console.log("-----------Checking Children---------")
-    if (checkLeft(current.left) && checkRight(current.right)) {
-      bstNodes.push(current.value);
-      console.log("Pushed new value to bst nodes list")
-      console.log("BST NODES:::: ", bstNodes)
-      return true;
-    } else {
-      return false;
+  let closest = tree.value;
+  function checkNode(node) {
+    if (Math.abs(target - node.value) < Math.abs(target - closest)) {
+      closest = node.value
+    }
+    if (node.left) {
+      checkNode(node.left);
+    }
+    if (node.right) {
+      checkNode(node.right);
     }
   }
-  function checkBst(node) {
-    checkChildren(node)
-    console.log("Done in original function")
-    console.log("BST NODES:::: ", bstNodes)
-  }
+  checkNode(tree);
+  return closest;
+}
 
-  checkBst(tree);
+// Solution 2:
+function findClosestValueInBst(tree, target) {
+  let closest = tree.value;
+  function checkNode(node) {
+    function checkIsCloser(node) {
+      if (Math.abs(target - node.value) < Math.abs(target - closest)) {
+        closest = node.value;
+      }
+    }
+    if (node.value === target) {
+      closest = node.value;
+    } else if (node.value > target) {
+      checkIsCloser(node)
+      if (node.left) {
+        checkNode(node.left)
+      }
+    } else {
+      checkIsCloser(node)
+      if (node.right) {
+        checkNode(node.right)
+      }
+    }
+  }
+  checkNode(tree);
+  return closest;
 }
