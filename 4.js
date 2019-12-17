@@ -10,6 +10,10 @@ class Node {
   }
 
   depthFirstSearch(array) {
-    // Write your code here.
+    array.push(this.name);
+    this.children.forEach(c => {
+      c.depthFirstSearch(array)
+    });
+    return array;
   }
 }
